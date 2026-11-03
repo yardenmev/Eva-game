@@ -5,256 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>המשחקים של אווה - אלף בית</title>
     <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
+        * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #333; overflow-x: hidden;
         }
-
-        h1 {
-            color: #ff4757;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #5352ed;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
+        h1 { color: #ff4757; font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); text-align: center; }
+        .subtitle { font-size: 1.2rem; color: #5352ed; margin-bottom: 20px; font-weight: bold; text-align: center; }
+        
+        /* Main Menu */
         .main-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px; width: 100%; max-width: 800px; margin-top: 10px;
         }
-
         .menu-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            border: 4px solid #ff6b81;
+            background: white; border-radius: 20px; padding: 20px; text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); cursor: pointer;
+            transition: transform 0.2s, background 0.2s; border: 4px solid #ff6b81;
         }
+        .menu-card:hover { transform: translateY(-5px); background: #fff2f4; }
+        .menu-card .icon { font-size: 3rem; margin-bottom: 10px; }
+        .menu-card h3 { color: #2f3542; font-size: 1.2rem; margin: 0; }
 
-        .menu-card:hover {
-            transform: translateY(-5px);
-            background: #fff2f4;
-        }
-
-        .menu-card .icon {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-        }
-
-        .menu-card h3 {
-            color: #2f3542;
-            font-size: 1.4rem;
-            margin: 0;
-        }
-
+        /* Game Container */
         .game-container {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            text-align: center;
-            position: relative;
+            display: none; width: 100%; max-width: 800px; background: white;
+            border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center; position: relative; margin-bottom: 30px;
         }
-
         .back-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+            position: absolute; top: 15px; right: 15px; background: #ff4757; color: white;
+            border: none; padding: 8px 15px; font-size: 1rem; border-radius: 50px;
+            cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3); z-index: 10;
         }
+        .message-area { font-size: 1.5rem; font-weight: bold; margin-top: 15px; min-height: 40px; color: #ff4757; }
 
-        .back-btn:hover {
-            background: #ff6b81;
-        }
-
-        /* Explorer Game Styles */
-        .alphabet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
-        }
-
+        /* 1. Explorer */
+        .alphabet-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(55px, 1fr)); gap: 10px; margin-top: 15px; }
         .letter-btn {
-            background: #70a1ff;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 2rem;
-            font-weight: bold;
-            height: 70px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(112, 161, 255, 0.4);
-            transition: transform 0.1s, background 0.2s;
+            background: #70a1ff; color: white; border: none; border-radius: 12px; font-size: 1.8rem;
+            font-weight: bold; height: 60px; cursor: pointer; box-shadow: 0 4px 10px rgba(112, 161, 255, 0.4);
         }
-
-        .letter-btn:active {
-            transform: scale(0.95);
-            background: #1e90ff;
-        }
-
+        .letter-btn:active { transform: scale(0.95); }
         .display-box {
-            background: #f1f2f6;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 3px dashed #70a1ff;
+            background: #f1f2f6; border-radius: 20px; padding: 15px; margin-bottom: 15px;
+            min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 3px dashed #70a1ff;
         }
+        .display-box .big-letter { font-size: 3rem; color: #2f3542; font-weight: bold; }
+        .display-box .emoji { font-size: 2.5rem; }
+        .display-box .word { font-size: 1.5rem; color: #ff4757; font-weight: bold; }
 
-        .display-box .big-letter {
-            font-size: 3.5rem;
-            color: #2f3542;
-            font-weight: bold;
-        }
+        /* 2. Quiz */
+        .quiz-emoji { font-size: 5rem; margin: 15px 0; animation: bounce 1.5s infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+        .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 300px; margin: 15px auto; }
+        .option-btn { background: #2ed573; color: white; border: none; border-radius: 15px; font-size: 2.5rem; font-weight: bold; height: 80px; cursor: pointer; }
 
-        .display-box .example-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .display-box .emoji {
-            font-size: 3rem;
-        }
-
-        .display-box .word {
-            font-size: 1.8rem;
-            color: #ff4757;
-            font-weight: bold;
-        }
-
-        /* What Starts With Game Styles */
-        .quiz-emoji {
-            font-size: 6rem;
-            margin: 20px 0;
-            animation: bounce 1.5s infinite alternate;
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-
-        .option-btn {
-            background: #2ed573;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            font-size: 3rem;
-            font-weight: bold;
-            height: 100px;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(46, 213, 115, 0.4);
-            transition: transform 0.1s;
-        }
-
-        .option-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Memory Game Styles */
-        .memory-controls {
-            margin-bottom: 15px;
-        }
-
-        .memory-controls button {
-            background: #ffa502;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            margin: 0 5px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
+        /* 3. Memory */
+        .memory-controls button { background: #ffa502; color: white; border: none; padding: 8px 15px; margin: 5px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .memory-grid { display: grid; gap: 10px; max-width: 400px; margin: 15px auto; }
         .memory-card {
-            background: #70a1ff;
-            color: transparent;
-            border-radius: 12px;
-            font-size: 2.2rem;
-            font-weight: bold;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s, background 0.3s;
+            background: #70a1ff; color: transparent; border-radius: 12px; font-size: 2rem;
+            font-weight: bold; height: 70px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;
         }
+        .memory-card.flipped { background: white; color: #2f3542; border: 3px solid #70a1ff; transform: rotateY(180deg); }
 
-        .memory-card.flipped {
-            background: white;
-            color: #2f3542;
-            border: 3px solid #70a1ff;
-            transform: rotateY(180deg);
+        /* 4. Bubbles */
+        .bubbles-area { position: relative; height: 300px; background: #eccc68; border-radius: 20px; overflow: hidden; margin-top: 15px; border: 3px solid #ffa502; }
+        .bubble {
+            position: absolute; width: 60px; height: 60px; background: rgba(255,255,255,0.8);
+            border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: bold; color: #2f3542; cursor: pointer;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1);
+            animation: floatUp 4s linear infinite;
         }
+        @keyframes floatUp { from { transform: translateY(320px); } to { transform: translateY(-80px); } }
 
-        .message-area {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 40px;
-            color: #ff4757;
+        /* 5. Train */
+        .train-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 20px 0; }
+        .train-car {
+            width: 70px; height: 70px; background: #ff4757; border-radius: 10px; display: flex;
+            align-items: center; justify-content: center; font-size: 2.5rem; color: white; font-weight: bold;
+            border-bottom: 8px solid #2f3542; position: relative;
         }
+        .train-car::after { content: ''; position: absolute; bottom: -12px; left: 10px; width: 15px; height: 15px; background: #333; border-radius: 50%; }
+        .train-car::before { content: ''; position: absolute; bottom: -12px; right: 10px; width: 15px; height: 15px; background: #333; border-radius: 50%; }
+        .train-car.empty { background: #f1f2f6; border: 3px dashed #ff4757; color: transparent; border-bottom: none; }
+        .train-options { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+
+        /* 6. Mystery Box */
+        .mystery-box-area { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        .mystery-box { font-size: 6rem; cursor: pointer; transition: transform 0.2s; }
+        .mystery-box:active { transform: scale(0.9); }
+        .mystery-result { display: none; flex-direction: column; align-items: center; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+        .mystery-result .letter { font-size: 5rem; font-weight: bold; color: #5352ed; }
     </style>
 </head>
 <body>
@@ -262,69 +110,93 @@
     <h1>🌟 המשחקים של אווה 🌟</h1>
     <div class="subtitle">בואי נלמד אותיות באהבה ובכיף!</div>
 
-    <!-- תפריט ראשי -->
     <div id="mainMenu" class="main-menu">
-        <div class="menu-card" onclick="openGame('explorer')">
-            <div class="icon">🔍</div>
-            <h3>חוקר האותיות</h3>
-        </div>
-        <div class="menu-card" onclick="openGame('quiz')">
-            <div class="icon">🍎</div>
-            <h3>מה מתחיל ב...?</h3>
-        </div>
-        <div class="menu-card" onclick="openGame('memory')">
-            <div class="icon">🧠</div>
-            <h3>משחק הזיכרון</h3>
-        </div>
+        <div class="menu-card" onclick="openGame('explorer')"><div class="icon">🔍</div><h3>חוקר האותיות</h3></div>
+        <div class="menu-card" onclick="openGame('quiz')"><div class="icon">🍎</div><h3>מה מתחיל ב...?</h3></div>
+        <div class="menu-card" onclick="openGame('memory')"><div class="icon">🧠</div><h3>משחק הזיכרון</h3></div>
+        <div class="menu-card" onclick="openGame('bubbles')"><div class="icon">🫧</div><h3>פיצוץ בועות</h3></div>
+        <div class="menu-card" onclick="openGame('train')"><div class="icon">🚂</div><h3>רכבת האותיות</h3></div>
+        <div class="menu-card" onclick="openGame('mystery')"><div class="icon">🎁</div><h3>תיבת הפתעות</h3></div>
     </div>
 
-    <!-- משחק 1: חוקר האותיות -->
+    <!-- 1. Explorer -->
     <div id="gameExplorer" class="game-container">
-        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <button class="back-btn" onclick="closeGames()">חזור</button>
         <h2>🔍 חוקר האותיות</h2>
-        <div class="display-box" id="explorerDisplay">
-            <div class="big-letter">לחצי על אות!</div>
-        </div>
+        <div class="display-box" id="explorerDisplay"><div class="big-letter">לחצי על אות!</div></div>
         <div class="alphabet-grid" id="explorerGrid"></div>
     </div>
 
-    <!-- משחק 2: מה מתחיל ב...? -->
+    <!-- 2. Quiz -->
     <div id="gameQuiz" class="game-container">
-        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <button class="back-btn" onclick="closeGames()">חזור</button>
         <h2>🍎 מה מתחיל ב...?</h2>
-        <div id="quizContent">
-            <div class="quiz-emoji" id="quizEmoji">🍎</div>
-            <button onclick="playCurrentQuizWord()" style="background:#ff4757; color:white; border:none; padding:10px 20px; font-size:1.2rem; border-radius:30px; cursor:pointer; margin-bottom:15px;">🔊 שמעי את המילה</button>
-            <div class="options-grid" id="quizOptions"></div>
-        </div>
+        <div class="quiz-emoji" id="quizEmoji">🍎</div>
+        <button onclick="playCurrentWord('quiz')" style="background:#ff4757; color:white; border:none; padding:10px 20px; border-radius:20px; cursor:pointer; font-size:1.2rem;">🔊 שמעי שוב</button>
+        <div class="options-grid" id="quizOptions"></div>
         <div class="message-area" id="quizMessage"></div>
     </div>
 
-    <!-- משחק 3: משחק הזיכרון -->
+    <!-- 3. Memory -->
     <div id="gameMemory" class="game-container">
-        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <button class="back-btn" onclick="closeGames()">חזור</button>
         <h2>🧠 משחק הזיכרון</h2>
         <div class="memory-controls">
-            <span>בחר רמת קושי: </span>
-            <button onclick="startMemoryGame(3)">קל (3 זוגות)</button>
-            <button onclick="startMemoryGame(4)">בינוני (4 זוגות)</button>
-            <button onclick="startMemoryGame(6)">אתגר (6 זוגות)</button>
+            <button onclick="startMemoryGame(3)">קל</button>
+            <button onclick="startMemoryGame(4)">בינוני</button>
+            <button onclick="startMemoryGame(6)">אתגר</button>
         </div>
         <div class="memory-grid" id="memoryGrid"></div>
         <div class="message-area" id="memoryMessage"></div>
     </div>
 
+    <!-- 4. Bubbles -->
+    <div id="gameBubbles" class="game-container">
+        <button class="back-btn" onclick="closeGames()">חזור</button>
+        <h2>🫧 איפה האות?</h2>
+        <div class="message-area" id="bubblesTarget" style="color:#2f3542; margin-bottom:5px;"></div>
+        <button onclick="playCurrentWord('bubbles')" style="background:#ff4757; color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer;">🔊 שמעי שוב</button>
+        <div class="bubbles-area" id="bubblesArea"></div>
+        <div class="message-area" id="bubblesMessage"></div>
+    </div>
+
+    <!-- 5. Train -->
+    <div id="gameTrain" class="game-container">
+        <button class="back-btn" onclick="closeGames()">חזור</button>
+        <h2>🚂 רכבת האותיות</h2>
+        <div style="font-size:1.2rem; color:#5352ed;">איזו אות חסרה ברכבת?</div>
+        <div class="train-container" id="trainContainer"></div>
+        <div class="train-options" id="trainOptions"></div>
+        <div class="message-area" id="trainMessage"></div>
+    </div>
+
+    <!-- 6. Mystery Box -->
+    <div id="gameMystery" class="game-container">
+        <button class="back-btn" onclick="closeGames()">חזור</button>
+        <h2>🎁 תיבת ההפתעות</h2>
+        <div style="font-size:1.2rem; color:#5352ed;">לחצי על המתנה!</div>
+        <div class="mystery-box-area">
+            <div class="mystery-box" id="mysteryBox" onclick="openMysteryBox()">🎁</div>
+            <div class="mystery-result" id="mysteryResult">
+                <div class="letter" id="mysteryLetter">א</div>
+                <div style="font-size:4rem;" id="mysteryEmoji">🦁</div>
+            </div>
+        </div>
+        <button onclick="resetMysteryBox()" id="mysteryNextBtn" style="display:none; background:#2ed573; color:white; border:none; padding:10px 20px; border-radius:20px; margin-top:20px; font-size:1.2rem; cursor:pointer;">עוד הפתעה!</button>
+    </div>
+
     <script>
+        // המאגר המלא עם תיקוני ההגייה (בלי ניקוד מבלבל למילים מסוימות)
         const alphabetData = [
             { letter: 'א', name: 'אָלֶף', exampleWord: 'אַרְיֵה', exampleEmoji: '🦁' },
             { letter: 'ב', name: 'בֵּת', exampleWord: 'בָּנָנָה', exampleEmoji: '🍌' },
             { letter: 'ג', name: 'גִּימֶל', exampleWord: 'גָּמָל', exampleEmoji: '🐪' },
             { letter: 'ד', name: 'דָּלֶת', exampleWord: 'דּוּבִי', exampleEmoji: '🧸' },
             { letter: 'ה', name: 'הֵא', exampleWord: 'הַר', exampleEmoji: '⛰️' },
-            { letter: 'ו', name: 'וָאו', exampleWord: 'וָרֶד', exampleEmoji: '🌹' },
+            { letter: 'ו', name: 'וָאו', exampleWord: 'וֶרֶד', exampleEmoji: '🌹' },
             { letter: 'ז', name: 'זַיִן', exampleWord: 'זֶבְּרָה', exampleEmoji: '🦓' },
             { letter: 'ח', name: 'חֵת', exampleWord: 'חָצִיל', exampleEmoji: '🍆' },
-            { letter: 'ט', name: 'טֵת', exampleWord: 'טַפָּח', exampleEmoji: '🧸' },
+            { letter: 'ט', name: 'טֵת', exampleWord: 'טַבַּעַת', exampleEmoji: '💍' },
             { letter: 'י', name: 'יוּד', exampleWord: 'יַלְדָּה', exampleEmoji: '👧' },
             { letter: 'כ', name: 'כָּף', exampleWord: 'כַּדּוּר', exampleEmoji: '⚽' },
             { letter: 'ל', name: 'לָמֶד', exampleWord: 'לִימוֹן', exampleEmoji: '🍋' },
@@ -340,37 +212,33 @@
             { letter: 'ת', name: 'תָּו', exampleWord: 'תַּפּוּחַ', exampleEmoji: '🍎' }
         ];
 
-        // מנגנון הקראה פנימי מובטח
+        // מנגנון הקראה פנימי ויציב
         function speak(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 let utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'he-IL';
                 utterance.rate = 0.9;
-                
                 let voices = window.speechSynthesis.getVoices();
                 let heVoice = voices.find(v => v.lang.includes('he') || v.lang.includes('iw'));
-                if (heVoice) {
-                    utterance.voice = heVoice;
-                }
-                
+                if (heVoice) utterance.voice = heVoice;
                 window.speechSynthesis.speak(utterance);
             }
         }
+        // פקודת הכנה לדפדפן
+        if ('speechSynthesis' in window) { window.speechSynthesis.getVoices(); }
 
+        // צלילים חיוביים
         function playSoundTone(freq, type = 'sine', duration = 0.15) {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
+                osc.type = type; osc.frequency.value = freq;
                 gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
             } catch(e) {}
         }
 
@@ -384,29 +252,40 @@
             document.getElementById('mainMenu').style.display = 'none';
             document.querySelectorAll('.game-container').forEach(el => el.style.display = 'none');
             
-            if (gameName === 'explorer') {
-                document.getElementById('gameExplorer').style.display = 'block';
-                initExplorer();
-            } else if (gameName === 'quiz') {
-                document.getElementById('gameQuiz').style.display = 'block';
-                nextQuizQuestion();
-            } else if (gameName === 'memory') {
-                document.getElementById('gameMemory').style.display = 'block';
-                startMemoryGame(3);
-            }
+            // "איתות" למנוע הדיבור כדי שיעבוד באינטרנט ברגע שלוחצים
+            speak(""); 
+
+            document.getElementById('game' + gameName.charAt(0).toUpperCase() + gameName.slice(1)).style.display = 'block';
+            
+            if(gameName === 'explorer') initExplorer();
+            else if(gameName === 'quiz') nextQuizQuestion();
+            else if(gameName === 'memory') startMemoryGame(3);
+            else if(gameName === 'bubbles') startBubbles();
+            else if(gameName === 'train') startTrain();
+            else if(gameName === 'mystery') resetMysteryBox();
         }
 
         function closeGames() {
             document.querySelectorAll('.game-container').forEach(el => el.style.display = 'none');
             document.getElementById('mainMenu').style.display = 'grid';
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+            clearInterval(bubblesInterval);
         }
 
-        // --- חוקר האותיות ---
+        // משתנים גלובליים
+        let currentItem = null;
+
+        function playCurrentWord(context) {
+            if(currentItem) {
+                if(context === 'quiz') speak(currentItem.exampleWord);
+                if(context === 'bubbles') speak("איפה האות " + currentItem.name);
+            }
+        }
+
+        // --- 1. חוקר האותיות ---
         function initExplorer() {
             const grid = document.getElementById('explorerGrid');
-            if (grid.children.length > 0) return; // טען פעם אחת בלבד
-            
+            if (grid.children.length > 0) return;
             alphabetData.forEach(item => {
                 const btn = document.createElement('button');
                 btn.className = 'letter-btn';
@@ -415,34 +294,26 @@
                     playSoundTone(440);
                     document.getElementById('explorerDisplay').innerHTML = `
                         <div class="big-letter">${item.letter} - ${item.name}</div>
-                        <div class="example-container">
+                        <div style="display:flex; align-items:center; gap:10px;">
                             <span class="emoji">${item.exampleEmoji}</span>
                             <span class="word">${item.exampleWord}</span>
-                        </div>
-                    `;
+                        </div>`;
                     speak(`${item.name}, ${item.exampleWord}`);
                 };
                 grid.appendChild(btn);
             });
         }
 
-        // --- מה מתחיל ב...? ---
-        let currentQuizItem = null;
-
+        // --- 2. חידון (מה מתחיל ב...) ---
         function nextQuizQuestion() {
             document.getElementById('quizMessage').innerText = '';
-            const randomIndex = Math.floor(Math.random() * alphabetData.length);
-            currentQuizItem = alphabetData[randomIndex];
+            currentItem = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+            document.getElementById('quizEmoji').innerText = currentItem.exampleEmoji;
             
-            document.getElementById('quizEmoji').innerText = currentQuizItem.exampleEmoji;
-            
-            // בחירת 3 מסיחים שונים
-            let options = [currentQuizItem];
+            let options = [currentItem];
             while (options.length < 4) {
                 let randomOpt = alphabetData[Math.floor(Math.random() * alphabetData.length)];
-                if (!options.some(o => o.letter === randomOpt.letter)) {
-                    options.push(randomOpt);
-                }
+                if (!options.some(o => o.letter === randomOpt.letter)) options.push(randomOpt);
             }
             options.sort(() => Math.random() - 0.5);
 
@@ -455,21 +326,13 @@
                 btn.onclick = () => checkQuizAnswer(opt.letter);
                 optionsGrid.appendChild(btn);
             });
-
-            speak(currentQuizItem.exampleWord);
+            speak(currentItem.exampleWord);
         }
-
-        function playCurrentQuizWord() {
-            if (currentQuizItem) {
-                speak(currentQuizItem.exampleWord);
-            }
-        }
-
-        function checkQuizAnswer(selectedLetter) {
-            if (selectedLetter === currentQuizItem.letter) {
+        function checkQuizAnswer(selected) {
+            if (selected === currentItem.letter) {
                 playSuccessSound();
-                document.getElementById('quizMessage').innerText = 'כל הכבוד! אלופה!';
-                speak('כל הכבוד אלופה');
+                document.getElementById('quizMessage').innerText = 'כל הכבוד!';
+                speak('כל הכבוד');
                 setTimeout(nextQuizQuestion, 1800);
             } else {
                 playSoundTone(220, 'sawtooth', 0.2);
@@ -478,83 +341,170 @@
             }
         }
 
-        // --- משחק הזיכרון ---
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let isLocked = false;
-
-        function startMemoryGame(pairsCount) {
+        // --- 3. זיכרון ---
+        let flippedCards = [], matchedPairs = 0, isLocked = false;
+        function startMemoryGame(pairs) {
             const grid = document.getElementById('memoryGrid');
-            grid.innerHTML = '';
-            document.getElementById('memoryMessage').innerText = '';
-            flippedCards = [];
-            matchedPairs = 0;
-            isLocked = false;
-
-            // בחר זוגות באקראי
-            let selected = [...alphabetData].sort(() => Math.random() - 0.5).slice(0, pairsCount);
-            let cardValues = [];
-            selected.forEach(item => {
-                cardValues.push({ letter: item.letter, name: item.name });
-                cardValues.push({ letter: item.letter, name: item.name });
-            });
-            cardValues.sort(() => Math.random() - 0.5);
-
-            grid.style.gridTemplateColumns = pairsCount === 6 ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)';
-
-            cardValues.forEach(val => {
+            grid.innerHTML = ''; document.getElementById('memoryMessage').innerText = '';
+            flippedCards = []; matchedPairs = 0; isLocked = false;
+            let selected = [...alphabetData].sort(() => Math.random() - 0.5).slice(0, pairs);
+            let cardVals = [];
+            selected.forEach(item => { cardVals.push(item, item); });
+            cardVals.sort(() => Math.random() - 0.5);
+            
+            grid.style.gridTemplateColumns = `repeat(${pairs}, 1fr)`;
+            cardVals.forEach(val => {
                 const card = document.createElement('div');
                 card.className = 'memory-card';
                 card.dataset.letter = val.letter;
-                card.dataset.name = val.name;
                 card.innerText = '?';
-                card.onclick = () => flipCard(card);
+                card.onclick = () => {
+                    if (isLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+                    playSoundTone(600);
+                    card.classList.add('flipped');
+                    card.innerText = val.letter;
+                    speak(val.name);
+                    flippedCards.push(card);
+                    if (flippedCards.length === 2) {
+                        isLocked = true;
+                        if (flippedCards[0].dataset.letter === flippedCards[1].dataset.letter) {
+                            playSuccessSound();
+                            flippedCards.forEach(c => c.classList.add('matched'));
+                            matchedPairs++; flippedCards = []; isLocked = false;
+                            if(matchedPairs === pairs) {
+                                document.getElementById('memoryMessage').innerText = 'סיימת!';
+                                speak('כל הכבוד סיימת');
+                            }
+                        } else {
+                            setTimeout(() => {
+                                flippedCards.forEach(c => { c.classList.remove('flipped'); c.innerText = '?'; });
+                                flippedCards = []; isLocked = false;
+                            }, 1000);
+                        }
+                    }
+                };
                 grid.appendChild(card);
             });
         }
 
-        function flipCard(card) {
-            if (isLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-
-            playSoundTone(600);
-            card.classList.add('flipped');
-            card.innerText = card.dataset.letter;
-            speak(card.dataset.name);
-
-            flippedCards.push(card);
-
-            if (flippedCards.length === 2) {
-                checkForMatch();
+        // --- 4. בועות ---
+        let bubblesInterval;
+        function startBubbles() {
+            clearInterval(bubblesInterval);
+            document.getElementById('bubblesMessage').innerText = '';
+            currentItem = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+            document.getElementById('bubblesTarget').innerText = "חפשי את האות: " + currentItem.letter;
+            speak("איפה האות " + currentItem.name);
+            
+            const area = document.getElementById('bubblesArea');
+            area.innerHTML = '';
+            
+            let bubbleOptions = [currentItem];
+            while(bubbleOptions.length < 5) {
+                let r = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+                if(!bubbleOptions.includes(r)) bubbleOptions.push(r);
             }
+            bubbleOptions.sort(() => Math.random() - 0.5);
+
+            bubbleOptions.forEach((opt, index) => createBubble(opt, index, area));
         }
 
-        function checkForMatch() {
-            isLocked = true;
-            const [card1, card2] = flippedCards;
-
-            if (card1.dataset.letter === card2.dataset.letter) {
-                playSuccessSound();
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-                matchedPairs++;
-                flippedCards = [];
-                isLocked = false;
-
-                const totalPairs = document.querySelectorAll('.memory-card').length / 2;
-                if (matchedPairs === totalPairs) {
-                    document.getElementById('memoryMessage').innerText = 'כל הכבוד! סיימת את המשחק!';
-                    speak('כל הכבוד אלופה סיימת את המשחק');
+        function createBubble(item, index, area) {
+            const b = document.createElement('div');
+            b.className = 'bubble';
+            b.innerText = item.letter;
+            b.style.left = (15 + (index * 15)) + '%';
+            b.style.animationDuration = (3 + Math.random() * 2) + 's';
+            b.style.animationDelay = (Math.random() * 1) + 's';
+            
+            b.onclick = () => {
+                if(item.letter === currentItem.letter) {
+                    playSuccessSound();
+                    b.style.display = 'none';
+                    document.getElementById('bubblesMessage').innerText = 'כל הכבוד!';
+                    speak('כל הכבוד');
+                    setTimeout(startBubbles, 2000);
+                } else {
+                    playSoundTone(220, 'sawtooth', 0.2);
+                    b.style.background = '#ff7675';
                 }
-            } else {
-                setTimeout(() => {
-                    card1.classList.remove('flipped');
-                    card1.innerText = '?';
-                    card2.classList.remove('flipped');
-                    card2.innerText = '?';
-                    flippedCards = [];
-                    isLocked = false;
-                }, 1000);
+            };
+            area.appendChild(b);
+        }
+
+        // --- 5. רכבת ---
+        function startTrain() {
+            document.getElementById('trainMessage').innerText = '';
+            const startIdx = Math.floor(Math.random() * (alphabetData.length - 2));
+            const sequence = [alphabetData[startIdx], alphabetData[startIdx+1], alphabetData[startIdx+2]];
+            
+            const emptyPos = Math.floor(Math.random() * 3);
+            currentItem = sequence[emptyPos];
+
+            const trainContainer = document.getElementById('trainContainer');
+            trainContainer.innerHTML = '';
+            
+            sequence.forEach((item, idx) => {
+                const car = document.createElement('div');
+                car.className = 'train-car';
+                if(idx === emptyPos) {
+                    car.classList.add('empty');
+                    car.innerText = '?';
+                } else {
+                    car.innerText = item.letter;
+                }
+                trainContainer.appendChild(car);
+            });
+
+            let options = [currentItem];
+            while(options.length < 2) {
+                let r = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+                if(r.letter !== currentItem.letter && r.letter !== sequence[0].letter && r.letter !== sequence[1].letter && r.letter !== sequence[2].letter) {
+                    options.push(r);
+                }
             }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsContainer = document.getElementById('trainOptions');
+            optionsContainer.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.letter;
+                btn.style.width = '80px';
+                btn.onclick = () => {
+                    if(opt.letter === currentItem.letter) {
+                        playSuccessSound();
+                        document.querySelector('.train-car.empty').innerText = opt.letter;
+                        document.querySelector('.train-car.empty').classList.remove('empty');
+                        document.getElementById('trainMessage').innerText = 'מעולה!';
+                        speak('כל הכבוד');
+                        setTimeout(startTrain, 2000);
+                    } else {
+                        playSoundTone(220, 'sawtooth', 0.2);
+                        speak('נסי שוב');
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // --- 6. תיבת הפתעות ---
+        function resetMysteryBox() {
+            document.getElementById('mysteryBox').style.display = 'block';
+            document.getElementById('mysteryResult').style.display = 'none';
+            document.getElementById('mysteryNextBtn').style.display = 'none';
+        }
+        function openMysteryBox() {
+            document.getElementById('mysteryBox').style.display = 'none';
+            currentItem = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+            document.getElementById('mysteryLetter').innerText = currentItem.letter;
+            document.getElementById('mysteryEmoji').innerText = currentItem.exampleEmoji;
+            document.getElementById('mysteryResult').style.display = 'flex';
+            document.getElementById('mysteryNextBtn').style.display = 'block';
+            
+            playSuccessSound();
+            speak(currentItem.name + ", " + currentItem.exampleWord);
         }
     </script>
 </body>
