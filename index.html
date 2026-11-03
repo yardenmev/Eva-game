@@ -1,712 +1,561 @@
-```html
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>המשחקים של אווה</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המשחקים של אווה - אלף בית</title>
     <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
         body {
-            font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 50%, #fbcfe8 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            touch-action: manipulation;
-        }
-        
-        .bouncy { animation: bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
+            color: #333;
         }
 
-        .wiggle { animation: wiggle 0.4s ease-in-out; }
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+        h1 {
+            color: #ff4757;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        .shake { animation: shake 0.5s; }
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #5352ed;
+            margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        .confetti {
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            border: 4px solid #ff6b81;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            background: #fff2f4;
+        }
+
+        .menu-card .icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+
+        .menu-card h3 {
+            color: #2f3542;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .game-container {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
             position: absolute;
-            width: 12px; height: 12px;
-            opacity: 0.9;
-            border-radius: 50%;
-            animation: fall linear forwards;
-            z-index: 100;
-        }
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
         }
 
-        .btn-press { transition: all 0.1s; }
-        .btn-press:active { transform: scale(0.95) translateY(4px); box-shadow: none !important; }
+        .back-btn:hover {
+            background: #ff6b81;
+        }
 
-        /* Memory Card Styles */
-        .memory-card {
-            perspective: 1000px;
+        /* Explorer Game Styles */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .letter-btn {
+            background: #70a1ff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 2rem;
+            font-weight: bold;
+            height: 70px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(112, 161, 255, 0.4);
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .letter-btn:active {
+            transform: scale(0.95);
+            background: #1e90ff;
+        }
+
+        .display-box {
+            background: #f1f2f6;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed #70a1ff;
+        }
+
+        .display-box .big-letter {
+            font-size: 3.5rem;
+            color: #2f3542;
+            font-weight: bold;
+        }
+
+        .display-box .example-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .display-box .emoji {
+            font-size: 3rem;
+        }
+
+        .display-box .word {
+            font-size: 1.8rem;
+            color: #ff4757;
+            font-weight: bold;
+        }
+
+        /* What Starts With Game Styles */
+        .quiz-emoji {
+            font-size: 6rem;
+            margin: 20px 0;
+            animation: bounce 1.5s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .option-btn {
+            background: #2ed573;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            height: 100px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(46, 213, 115, 0.4);
+            transition: transform 0.1s;
+        }
+
+        .option-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Memory Game Styles */
+        .memory-controls {
+            margin-bottom: 15px;
+        }
+
+        .memory-controls button {
+            background: #ffa502;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 10px;
+            font-weight: bold;
             cursor: pointer;
         }
-        .memory-card-inner {
-            position: relative;
-            width: 100%; height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
         }
-        .memory-card.flipped .memory-card-inner {
+
+        .memory-card {
+            background: #70a1ff;
+            color: transparent;
+            border-radius: 12px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .memory-card.flipped {
+            background: white;
+            color: #2f3542;
+            border: 3px solid #70a1ff;
             transform: rotateY(180deg);
         }
-        .memory-card-front, .memory-card-back {
-            position: absolute;
-            width: 100%; height: 100%;
-            backface-visibility: hidden;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 1rem;
-            border: 4px solid #fbcfe8;
-        }
-        .memory-card-back { background-color: #fdf2f8; transform: rotateY(180deg); }
-        .memory-card-front { background: linear-gradient(135deg, #f472b6, #fb7185); }
 
-        /* Bubbles */
-        .bubble {
-            position: absolute;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 230, 250, 0.8));
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 2.5rem; font-weight: 900; color: #db2777;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1), inset 0 0 20px rgba(255,255,255,1);
-            cursor: pointer;
-            animation: floatBubble 6s infinite ease-in-out alternate;
+        .message-area {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 40px;
+            color: #ff4757;
         }
-        @keyframes floatBubble {
-            0% { transform: translateY(0) translateX(0); }
-            100% { transform: translateY(-30px) translateX(20px); }
-        }
-        
-        .hide-view { display: none !important; }
     </style>
 </head>
-<body class="flex flex-col items-center p-4 sm:p-6 select-none relative w-full h-full">
+<body>
 
-    <!-- Header -->
-    <header class="w-full max-w-3xl bg-white/90 backdrop-blur-md rounded-3xl shadow-lg p-4 mb-6 flex items-center justify-between border-4 border-pink-300 z-10 relative">
-        <div class="flex items-center gap-3">
-            <span class="text-3xl sm:text-4xl">🦄</span>
-            <h1 class="text-2xl sm:text-3xl font-black text-pink-600 drop-shadow-sm">הַמִּשְׂחָקִים שֶׁל אֵוָוה</h1>
+    <h1>🌟 המשחקים של אווה 🌟</h1>
+    <div class="subtitle">בואי נלמד אותיות באהבה ובכיף!</div>
+
+    <!-- תפריט ראשי -->
+    <div id="mainMenu" class="main-menu">
+        <div class="menu-card" onclick="openGame('explorer')">
+            <div class="icon">🔍</div>
+            <h3>חוקר האותיות</h3>
         </div>
-        <button id="back-btn" onclick="showView('menu-view')" class="hidden btn-press bg-pink-100 text-pink-700 font-bold px-4 py-2 rounded-xl shadow-[0_4px_0_0_rgba(244,114,182,1)] border-2 border-pink-300">
-            🏠 חֲזוֹר
-        </button>
-    </header>
-
-    <!-- MAIN MENU -->
-    <main id="menu-view" class="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <button onclick="startExplorer()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(219,39,119,1)] flex flex-col items-center justify-center gap-3 bg-pink-400 text-white border-4 border-pink-300">
-            <span class="text-5xl">🔍</span>
-            <span>חוֹקֶרֶת הָאוֹתִיּוֹת</span>
-        </button>
-        <button onclick="startStarter()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(147,51,234,1)] flex flex-col items-center justify-center gap-3 bg-purple-400 text-white border-4 border-purple-300">
-            <span class="text-5xl">🍎</span>
-            <span>מָה מַתְחִיל בְּ..?</span>
-        </button>
-        <button onclick="startMemoryMenu()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(59,130,246,1)] flex flex-col items-center justify-center gap-3 bg-blue-400 text-white border-4 border-blue-300">
-            <span class="text-5xl">🧠</span>
-            <span>מִשְׂחַק הַזִּכָּרוֹן</span>
-        </button>
-        <button onclick="startBubble()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(16,185,129,1)] flex flex-col items-center justify-center gap-3 bg-emerald-400 text-white border-4 border-emerald-300">
-            <span class="text-5xl">🫧</span>
-            <span>פִּצּוּץ בּוּעוֹת</span>
-        </button>
-        <button onclick="startTrain()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(245,158,11,1)] flex flex-col items-center justify-center gap-3 bg-amber-400 text-white border-4 border-amber-300">
-            <span class="text-5xl">🚂</span>
-            <span>רַכֶּבֶת הָאוֹתִיּוֹת</span>
-        </button>
-        <button onclick="startBox()" class="btn-press py-6 px-4 rounded-[2rem] font-black text-2xl shadow-[0_8px_0_0_rgba(239,68,68,1)] flex flex-col items-center justify-center gap-3 bg-red-400 text-white border-4 border-red-300">
-            <span class="text-5xl">🎁</span>
-            <span>תֵּיבַת הַהַפְתָּעוֹת</span>
-        </button>
-    </main>
-
-    <!-- GAME VIEWS (Hidden by default) -->
-    <div id="game-container" class="w-full max-w-3xl bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-2xl p-6 sm:p-8 flex-col items-center justify-start min-h-[500px] border-4 border-white hide-view relative">
-        
-        <!-- 1. EXPLORER -->
-        <div id="explorer-view" class="w-full flex flex-col items-center hide-view">
-            <h2 class="text-3xl font-black text-pink-600 mb-4">לַחֲצִי עַל אוֹת!</h2>
-            
-            <div id="explorer-display" class="w-full max-w-xs bg-white border-4 border-pink-300 rounded-3xl p-3 mb-6 flex flex-row items-center justify-center gap-6 shadow-[0_5px_0_0_rgba(244,113,181,1)] hide-view transition-transform duration-300">
-                <div id="explorer-display-letter" class="text-6xl sm:text-7xl font-black text-pink-500">א</div>
-                <div class="flex flex-col items-center">
-                    <span id="explorer-display-emoji" class="text-5xl sm:text-6xl mb-1 bouncy">🍎</span>
-                    <span id="explorer-display-word" class="text-xl font-bold text-pink-700 bg-pink-100 px-4 py-1 rounded-full">תַּפּוּחַ</span>
-                </div>
-            </div>
-
-            <div id="explorer-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-3 w-full" dir="rtl">
-                <!-- Populated via JS -->
-            </div>
+        <div class="menu-card" onclick="openGame('quiz')">
+            <div class="icon">🍎</div>
+            <h3>מה מתחיל ב...?</h3>
         </div>
-
-        <!-- 2. STARTER -->
-        <div id="starter-view" class="w-full flex flex-col items-center hide-view">
-            <h2 class="text-3xl font-black text-purple-600 mb-6">מָה מַתְחִיל אֶת הַמִּלָּה?</h2>
-            <div class="flex flex-col items-center justify-center bg-purple-50 border-4 border-purple-200 rounded-[2.5rem] p-8 mb-6 w-full max-w-xs shadow-inner cursor-pointer" onclick="playStarterTTS()">
-                <span id="starter-emoji" class="text-8xl mb-4" style="display: inline-block;">🍎</span>
-                <span class="text-lg bg-purple-200 text-purple-700 px-6 py-2 rounded-full font-bold">🔊 הַשְׁמִיעִי שׁוּב</span>
-            </div>
-            <div id="starter-options" class="grid grid-cols-3 gap-4 w-full max-w-sm mb-6">
-                <!-- Populated via JS -->
-            </div>
+        <div class="menu-card" onclick="openGame('memory')">
+            <div class="icon">🧠</div>
+            <h3>משחק הזיכרון</h3>
         </div>
+    </div>
 
-        <!-- 3. MEMORY -->
-        <div id="memory-view" class="w-full flex flex-col items-center hide-view">
-            <div id="memory-setup" class="flex flex-col items-center w-full">
-                <h2 class="text-3xl font-black text-blue-600 mb-8">כַּמָּה זְגוֹת נְשַׂחֵק?</h2>
-                <div class="flex gap-4">
-                    <button onclick="initMemory(3)" class="btn-press bg-blue-300 text-white text-3xl font-black px-6 py-4 rounded-2xl shadow-[0_5px_0_0_rgba(96,165,250,1)] border-4 border-blue-200">3</button>
-                    <button onclick="initMemory(4)" class="btn-press bg-blue-400 text-white text-3xl font-black px-6 py-4 rounded-2xl shadow-[0_5px_0_0_rgba(59,130,246,1)] border-4 border-blue-300">4</button>
-                    <button onclick="initMemory(6)" class="btn-press bg-blue-500 text-white text-3xl font-black px-6 py-4 rounded-2xl shadow-[0_5px_0_0_rgba(37,99,235,1)] border-4 border-blue-400">6</button>
-                </div>
-            </div>
-            <div id="memory-game" class="w-full flex-col items-center hide-view">
-                <h2 class="text-3xl font-black text-blue-600 mb-6">מִצְאִי אֶת הַזּוּגוֹת!</h2>
-                <div id="memory-grid" class="grid gap-3 w-full max-w-md mx-auto" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
-                    <!-- Cards -->
-                </div>
-            </div>
+    <!-- משחק 1: חוקר האותיות -->
+    <div id="gameExplorer" class="game-container">
+        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <h2>🔍 חוקר האותיות</h2>
+        <div class="display-box" id="explorerDisplay">
+            <div class="big-letter">לחצי על אות!</div>
         </div>
+        <div class="alphabet-grid" id="explorerGrid"></div>
+    </div>
 
-        <!-- 4. BUBBLE POP -->
-        <div id="bubble-view" class="w-full flex flex-col items-center hide-view h-full">
-            <h2 class="text-3xl font-black text-emerald-600 mb-2">אֵיפֹה הָאוֹת:</h2>
-            <div class="bg-emerald-100 text-emerald-800 text-5xl font-black px-8 py-4 rounded-3xl border-4 border-emerald-300 mb-4 bouncy" id="bubble-target-display">
-                א
-            </div>
-            <button onclick="playBubbleTTS()" class="mb-4 bg-emerald-200 text-emerald-800 px-4 py-1 rounded-full font-bold">🔊 הַשְׁמִיעִי שׁוּב</button>
-            <div id="bubble-area" class="relative w-full h-64 sm:h-80 bg-blue-50 rounded-[2rem] border-4 border-emerald-100 overflow-hidden">
-                <!-- Bubbles -->
-            </div>
+    <!-- משחק 2: מה מתחיל ב...? -->
+    <div id="gameQuiz" class="game-container">
+        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <h2>🍎 מה מתחיל ב...?</h2>
+        <div id="quizContent">
+            <div class="quiz-emoji" id="quizEmoji">🍎</div>
+            <button onclick="playCurrentQuizWord()" style="background:#ff4757; color:white; border:none; padding:10px 20px; font-size:1.2rem; border-radius:30px; cursor:pointer; margin-bottom:15px;">🔊 שמעי את המילה</button>
+            <div class="options-grid" id="quizOptions"></div>
         </div>
+        <div class="message-area" id="quizMessage"></div>
+    </div>
 
-        <!-- 5. TRAIN -->
-        <div id="train-view" class="w-full flex flex-col items-center hide-view">
-            <h2 class="text-3xl font-black text-amber-600 mb-8">הַשְׁלִימִי אֶת הָרַכֶּבֶת</h2>
-            
-            <div class="flex justify-center items-center gap-1 sm:gap-2 mb-10 w-full" id="train-sequence">
-                <!-- Carts -->
-            </div>
-
-            <div class="w-full h-2 bg-gray-300 rounded-full mb-8 relative">
-                <div class="absolute -top-1 left-0 right-0 border-t-4 border-dashed border-gray-400"></div>
-            </div>
-
-            <div id="train-options" class="flex justify-center gap-4 w-full">
-                <!-- Options -->
-            </div>
+    <!-- משחק 3: משחק הזיכרון -->
+    <div id="gameMemory" class="game-container">
+        <button class="back-btn" onclick="closeGames()">🏠 תפריט</button>
+        <h2>🧠 משחק הזיכרון</h2>
+        <div class="memory-controls">
+            <span>בחר רמת קושי: </span>
+            <button onclick="startMemoryGame(3)">קל (3 זוגות)</button>
+            <button onclick="startMemoryGame(4)">בינוני (4 זוגות)</button>
+            <button onclick="startMemoryGame(6)">אתגר (6 זוגות)</button>
         </div>
-
-        <!-- 6. BOX -->
-        <div id="box-view" class="w-full flex flex-col items-center justify-center hide-view min-h-[400px]">
-            <h2 class="text-3xl font-black text-red-600 mb-8" id="box-title">לַחֲצִי עַל הַמַּתָּנָה!</h2>
-            
-            <div class="relative w-64 h-64 flex justify-center items-center cursor-pointer" onclick="openBox()" id="box-container">
-                <div id="box-closed" class="text-[150px] transition-transform hover:scale-110 leading-none">
-                    🎁
-                </div>
-                <div id="box-open" class="absolute inset-0 flex flex-col items-center justify-center hide-view">
-                    <div id="box-letter" class="text-9xl font-black text-red-500 drop-shadow-xl z-10 scale-0 transition-transform duration-500">א</div>
-                    <div class="text-[120px] absolute bottom-0 leading-none opacity-50 z-0">📦</div>
-                </div>
-            </div>
-        </div>
-
+        <div class="memory-grid" id="memoryGrid"></div>
+        <div class="message-area" id="memoryMessage"></div>
     </div>
 
     <script>
-        // Data Models
-        const alphabet = [
+        const alphabetData = [
             { letter: 'א', name: 'אָלֶף', exampleWord: 'אַרְיֵה', exampleEmoji: '🦁' },
-            { letter: 'ב', name: 'בֵּת', exampleWord: 'בָּנָנָה', exampleEmoji: '🍌' },
-            { letter: 'ג', name: 'גִּימֶל', exampleWord: 'גְּלִידָה', exampleEmoji: '🍦' },
-            { letter: 'ד', name: 'דָּלֶת', exampleWord: 'דְּבוֹרָה', exampleEmoji: '🐝' },
+            { letter: 'ב', name: 'בֵּת', exampleWord: 'בָּנָנָה', exampleEmoji: '🍌' },
+            { letter: 'ג', name: 'גִּימֶל', exampleWord: 'גָּמָל', exampleEmoji: '🐪' },
+            { letter: 'ד', name: 'דָּלֶת', exampleWord: 'דּוּבִי', exampleEmoji: '🧸' },
             { letter: 'ה', name: 'הֵא', exampleWord: 'הַר', exampleEmoji: '⛰️' },
-            { letter: 'ו', name: 'וָו', exampleWord: 'וֶרֶד', exampleEmoji: '🌹' },
-            { letter: 'ז', name: 'זַיִן', exampleWord: 'זֶבְּרָה', exampleEmoji: '🦓' },
-            { letter: 'ח', name: 'חֵת', exampleWord: 'חָתוּל', exampleEmoji: '🐱' },
-            { letter: 'ט', name: 'טֵת', exampleWord: 'טַבַּעַת', exampleEmoji: '💍' },
-            { letter: 'י', name: 'יוֹד', exampleWord: 'יָרֵחַ', exampleEmoji: '🌙' },
-            { letter: 'כ', name: 'כָּף', exampleWord: 'כֶּלֶב', exampleEmoji: '🐶' },
-            { letter: 'ל', name: 'לָמֶד', exampleWord: 'לֵיצָן', exampleEmoji: '🤡' },
+            { letter: 'ו', name: 'וָאו', exampleWord: 'וָרֶד', exampleEmoji: '🌹' },
+            { letter: 'ז', name: 'זַיִן', exampleWord: 'זֶבְּרָה', exampleEmoji: '🦓' },
+            { letter: 'ח', name: 'חֵת', exampleWord: 'חָצִיל', exampleEmoji: '🍆' },
+            { letter: 'ט', name: 'טֵת', exampleWord: 'טַפָּח', exampleEmoji: '🧸' },
+            { letter: 'י', name: 'יוּד', exampleWord: 'יַלְדָּה', exampleEmoji: '👧' },
+            { letter: 'כ', name: 'כָּף', exampleWord: 'כַּדּוּר', exampleEmoji: '⚽' },
+            { letter: 'ל', name: 'לָמֶד', exampleWord: 'לִימוֹן', exampleEmoji: '🍋' },
             { letter: 'מ', name: 'מֵם', exampleWord: 'מְכוֹנִית', exampleEmoji: '🚗' },
-            { letter: 'נ', name: 'נוּן', exampleWord: 'נָמֵר', exampleEmoji: '🐯' },
-            { letter: 'ס', name: 'סָמֶךְ', exampleWord: 'סֵפֶר', exampleEmoji: '📖' },
+            { letter: 'נ', name: 'נוּן', exampleWord: 'נָמֵר', exampleEmoji: '🐅' },
+            { letter: 'ס', name: 'סָמֶך', exampleWord: 'סוּס', exampleEmoji: '🐎' },
             { letter: 'ע', name: 'עַיִן', exampleWord: 'עַגְבָנִיָּה', exampleEmoji: '🍅' },
-            { letter: 'פ', name: 'פֵּיי', exampleWord: 'פִּיל', exampleEmoji: '🐘' },
-            { letter: 'צ', name: 'צָדִי', exampleWord: 'צְפַרְדֵּעַ', exampleEmoji: '🐸' },
+            { letter: 'פ', name: 'פֵּא', exampleWord: 'פִּיל', exampleEmoji: '🐘' },
+            { letter: 'צ', name: 'צָדִי', exampleWord: 'צִפּוֹר', exampleEmoji: '🐦' },
             { letter: 'ק', name: 'קוֹף', exampleWord: 'קוּף', exampleEmoji: '🐒' },
-            { letter: 'ר', name: 'רֵישׁ', exampleWord: 'רַכֶּבֶת', exampleEmoji: '🚂' },
-            { letter: 'ש', name: 'שִׁין', exampleWord: 'שֶׁמֶשׁ', exampleEmoji: '☀️' },
-            { letter: 'ת', name: 'תָּו', exampleWord: 'תַּפּוּחַ', exampleEmoji: '🍎' }
+            { letter: 'ר', name: 'רֵישׁ', exampleWord: 'רֹאשׁ', exampleEmoji: '👑' },
+            { letter: 'ש', name: 'שִׁיִן', exampleWord: 'שֶׁמֶשׁ', exampleEmoji: '☀️' },
+            { letter: 'ת', name: 'תָּו', exampleWord: 'תַּפּוּחַ', exampleEmoji: '🍎' }
         ];
 
-        const alphabetPure = alphabet.map(a => a.letter);
-
-        const words = [
-            { word: 'תַּפּוּחַ', emoji: '🍎', start: 'ת' },
-            { word: 'כֶּלֶב', emoji: '🐶', start: 'כ' },
-            { word: 'פִּיל', emoji: '🐘', start: 'פ' },
-            { word: 'חָתוּל', emoji: '🐱', start: 'ח' },
-            { word: 'קוּף', emoji: '🐒', start: 'ק' },
-            { word: 'עַגְבָנִיָּה', emoji: '🍅', start: 'ע' },
-            { word: 'בָּנָנָה', emoji: '🍌', start: 'ב' },
-            { word: 'אַרְיֵה', emoji: '🦁', start: 'א' },
-            { word: 'נָמֵר', emoji: '🐯', start: 'נ' },
-            { word: 'שֶׁמֶשׁ', emoji: '☀️', start: 'ש' }
-        ];
-
-        // Core TTS Function using Google Translate URL
+        // מנגנון הקראה פנימי מובטח
         function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'he-IL';
+                utterance.rate = 0.9;
+                
+                let voices = window.speechSynthesis.getVoices();
+                let heVoice = voices.find(v => v.lang.includes('he') || v.lang.includes('iw'));
+                if (heVoice) {
+                    utterance.voice = heVoice;
+                }
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function playSoundTone(freq, type = 'sine', duration = 0.15) {
             try {
-                const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=he&q=${encodeURIComponent(text)}`;
-                const audio = new Audio(url);
-                audio.play().catch(e => console.warn("Audio error:", e));
-            } catch (e) {
-                console.error("TTS error:", e);
-            }
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
         }
 
-        function createConfetti() {
-            const colors = ['#f472b6', '#c084fc', '#60a5fa', '#34d399', '#fbbf24'];
-            for (let i = 0; i < 40; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti';
-                conf.style.left = Math.random() * window.innerWidth + 'px';
-                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                const size = Math.random() * 10 + 8;
-                conf.style.width = size + 'px';
-                conf.style.height = size + 'px';
-                conf.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 2500);
-            }
+        function playSuccessSound() {
+            playSoundTone(523.25, 'sine', 0.1);
+            setTimeout(() => playSoundTone(659.25, 'sine', 0.1), 100);
+            setTimeout(() => playSoundTone(783.99, 'sine', 0.2), 200);
         }
 
-        // View Management
-        function showView(viewId) {
-            document.getElementById('menu-view').classList.add('hide-view');
-            document.getElementById('game-container').classList.add('hide-view');
-            document.getElementById('back-btn').classList.add('hidden');
+        function openGame(gameName) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.querySelectorAll('.game-container').forEach(el => el.style.display = 'none');
             
-            const games = ['explorer-view', 'starter-view', 'memory-view', 'bubble-view', 'train-view', 'box-view'];
-            games.forEach(id => document.getElementById(id).classList.add('hide-view'));
-
-            if (viewId === 'menu-view') {
-                document.getElementById('menu-view').classList.remove('hide-view');
-            } else {
-                document.getElementById('game-container').classList.remove('hide-view');
-                document.getElementById('game-container').classList.add('flex');
-                document.getElementById(viewId).classList.remove('hide-view');
-                document.getElementById('back-btn').classList.remove('hidden');
+            if (gameName === 'explorer') {
+                document.getElementById('gameExplorer').style.display = 'block';
+                initExplorer();
+            } else if (gameName === 'quiz') {
+                document.getElementById('gameQuiz').style.display = 'block';
+                nextQuizQuestion();
+            } else if (gameName === 'memory') {
+                document.getElementById('gameMemory').style.display = 'block';
+                startMemoryGame(3);
             }
         }
 
-        // ==========================================
-        // 1. EXPLORER
-        // ==========================================
-        function startExplorer() {
-            showView('explorer-view');
-            document.getElementById('explorer-display').classList.add('hide-view');
+        function closeGames() {
+            document.querySelectorAll('.game-container').forEach(el => el.style.display = 'none');
+            document.getElementById('mainMenu').style.display = 'grid';
+            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        }
+
+        // --- חוקר האותיות ---
+        function initExplorer() {
+            const grid = document.getElementById('explorerGrid');
+            if (grid.children.length > 0) return; // טען פעם אחת בלבד
             
-            const grid = document.getElementById('explorer-grid');
-            if (grid.children.length === 0) {
-                grid.innerHTML = '';
-                alphabet.forEach(item => {
-                    const btn = document.createElement('button');
-                    btn.className = "btn-press bg-pink-50 text-pink-700 font-black text-3xl sm:text-4xl h-16 sm:h-20 rounded-2xl shadow-[0_4px_0_0_rgba(244,114,182,1)] border-2 border-pink-200 flex items-center justify-center";
-                    btn.textContent = item.letter;
-                    btn.onclick = () => {
-                        const display = document.getElementById('explorer-display');
-                        display.classList.remove('hide-view');
-                        
-                        document.getElementById('explorer-display-letter').textContent = item.letter;
-                        document.getElementById('explorer-display-emoji').textContent = item.exampleEmoji;
-                        document.getElementById('explorer-display-word').textContent = item.exampleWord;
-                        
-                        btn.classList.add('bouncy');
-                        const emojiEl = document.getElementById('explorer-display-emoji');
-                        emojiEl.classList.remove('bouncy');
-                        void emojiEl.offsetWidth;
-                        emojiEl.classList.add('bouncy');
-                        setTimeout(() => btn.classList.remove('bouncy'), 500);
-
-                        speak(item.name + ", " + item.exampleWord);
-                    };
-                    grid.appendChild(btn);
-                });
-            }
-        }
-
-        // ==========================================
-        // 2. STARTER
-        // ==========================================
-        let currentStarter = null;
-        function startStarter() {
-            showView('starter-view');
-            nextStarterRound();
-        }
-
-        function nextStarterRound() {
-            currentStarter = words[Math.floor(Math.random() * words.length)];
-            const emoji = document.getElementById('starter-emoji');
-            emoji.textContent = currentStarter.emoji;
-            
-            emoji.classList.remove('bouncy');
-            void emoji.offsetWidth;
-            emoji.classList.add('bouncy');
-
-            let opts = [currentStarter.start];
-            while (opts.length < 3) {
-                let r = alphabet[Math.floor(Math.random() * alphabet.length)].letter;
-                if (!opts.includes(r)) opts.push(r);
-            }
-            opts.sort(() => Math.random() - 0.5);
-
-            const container = document.getElementById('starter-options');
-            container.innerHTML = '';
-            opts.forEach(letter => {
+            alphabetData.forEach(item => {
                 const btn = document.createElement('button');
-                btn.className = "btn-press bg-white text-purple-700 font-black text-5xl h-24 rounded-3xl shadow-[0_6px_0_0_rgba(216,180,254,1)] border-4 border-purple-200 flex items-center justify-center";
-                btn.textContent = letter;
+                btn.className = 'letter-btn';
+                btn.innerText = item.letter;
                 btn.onclick = () => {
-                    if (letter === currentStarter.start) {
-                        btn.classList.replace('bg-white', 'bg-green-400');
-                        btn.classList.replace('text-purple-700', 'text-white');
-                        speak("כל הכבוד! " + letter);
-                        createConfetti();
-                        Array.from(container.children).forEach(b => b.onclick = null);
-                        setTimeout(nextStarterRound, 2000);
-                    } else {
-                        btn.classList.replace('bg-white', 'bg-red-100');
-                        btn.classList.add('wiggle');
-                        speak("נסי שוב");
-                        setTimeout(() => {
-                            btn.classList.remove('wiggle');
-                            btn.classList.replace('bg-red-100', 'bg-white');
-                        }, 500);
-                    }
+                    playSoundTone(440);
+                    document.getElementById('explorerDisplay').innerHTML = `
+                        <div class="big-letter">${item.letter} - ${item.name}</div>
+                        <div class="example-container">
+                            <span class="emoji">${item.exampleEmoji}</span>
+                            <span class="word">${item.exampleWord}</span>
+                        </div>
+                    `;
+                    speak(`${item.name}, ${item.exampleWord}`);
                 };
-                container.appendChild(btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        // --- מה מתחיל ב...? ---
+        let currentQuizItem = null;
+
+        function nextQuizQuestion() {
+            document.getElementById('quizMessage').innerText = '';
+            const randomIndex = Math.floor(Math.random() * alphabetData.length);
+            currentQuizItem = alphabetData[randomIndex];
+            
+            document.getElementById('quizEmoji').innerText = currentQuizItem.exampleEmoji;
+            
+            // בחירת 3 מסיחים שונים
+            let options = [currentQuizItem];
+            while (options.length < 4) {
+                let randomOpt = alphabetData[Math.floor(Math.random() * alphabetData.length)];
+                if (!options.some(o => o.letter === randomOpt.letter)) {
+                    options.push(randomOpt);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const optionsGrid = document.getElementById('quizOptions');
+            optionsGrid.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.letter;
+                btn.onclick = () => checkQuizAnswer(opt.letter);
+                optionsGrid.appendChild(btn);
             });
 
-            playStarterTTS();
+            speak(currentQuizItem.exampleWord);
         }
 
-        function playStarterTTS() {
-            if (currentStarter) speak(currentStarter.word);
+        function playCurrentQuizWord() {
+            if (currentQuizItem) {
+                speak(currentQuizItem.exampleWord);
+            }
         }
 
-        // ==========================================
-        // 3. MEMORY
-        // ==========================================
-        let memoryCards = [];
+        function checkQuizAnswer(selectedLetter) {
+            if (selectedLetter === currentQuizItem.letter) {
+                playSuccessSound();
+                document.getElementById('quizMessage').innerText = 'כל הכבוד! אלופה!';
+                speak('כל הכבוד אלופה');
+                setTimeout(nextQuizQuestion, 1800);
+            } else {
+                playSoundTone(220, 'sawtooth', 0.2);
+                document.getElementById('quizMessage').innerText = 'נסי שוב מתוקה!';
+                speak('נסי שוב');
+            }
+        }
+
+        // --- משחק הזיכרון ---
         let flippedCards = [];
         let matchedPairs = 0;
-        let totalPairs = 0;
+        let isLocked = false;
 
-        function startMemoryMenu() {
-            showView('memory-view');
-            document.getElementById('memory-setup').classList.remove('hide-view');
-            document.getElementById('memory-game').classList.add('hide-view');
-        }
-
-        function initMemory(pairs) {
-            totalPairs = pairs;
-            matchedPairs = 0;
-            flippedCards = [];
-            
-            document.getElementById('memory-setup').classList.add('hide-view');
-            document.getElementById('memory-game').classList.remove('hide-view');
-            
-            const grid = document.getElementById('memory-grid');
+        function startMemoryGame(pairsCount) {
+            const grid = document.getElementById('memoryGrid');
             grid.innerHTML = '';
-            grid.style.gridTemplateColumns = `repeat(${pairs === 3 ? 3 : pairs === 4 ? 4 : 4}, minmax(0, 1fr))`;
+            document.getElementById('memoryMessage').innerText = '';
+            flippedCards = [];
+            matchedPairs = 0;
+            isLocked = false;
 
-            let selectedLetters = [];
-            let pool = [...alphabet];
-            for (let i=0; i<pairs; i++) {
-                let idx = Math.floor(Math.random() * pool.length);
-                selectedLetters.push(pool[idx]);
-                pool.splice(idx, 1);
-            }
+            // בחר זוגות באקראי
+            let selected = [...alphabetData].sort(() => Math.random() - 0.5).slice(0, pairsCount);
+            let cardValues = [];
+            selected.forEach(item => {
+                cardValues.push({ letter: item.letter, name: item.name });
+                cardValues.push({ letter: item.letter, name: item.name });
+            });
+            cardValues.sort(() => Math.random() - 0.5);
 
-            memoryCards = [...selectedLetters, ...selectedLetters];
-            memoryCards.sort(() => Math.random() - 0.5);
+            grid.style.gridTemplateColumns = pairsCount === 6 ? 'repeat(4, 1fr)' : 'repeat(3, 1fr)';
 
-            memoryCards.forEach((item, index) => {
+            cardValues.forEach(val => {
                 const card = document.createElement('div');
-                card.className = 'memory-card h-24 sm:h-28';
-                card.dataset.index = index;
-                card.dataset.letter = item.letter;
-                
-                card.innerHTML = `
-                    <div class="memory-card-inner shadow-md rounded-2xl">
-                        <div class="memory-card-front text-white text-5xl font-black shadow-[0_5px_0_0_rgba(244,113,181,1)]">
-                            <span style="transform: rotateY(180deg)">?</span>
-                        </div>
-                        <div class="memory-card-back text-blue-700 text-5xl font-black">
-                            ${item.letter}
-                        </div>
-                    </div>
-                `;
-                
-                card.onclick = () => flipMemoryCard(card, item);
+                card.className = 'memory-card';
+                card.dataset.letter = val.letter;
+                card.dataset.name = val.name;
+                card.innerText = '?';
+                card.onclick = () => flipCard(card);
                 grid.appendChild(card);
             });
         }
 
-        function flipMemoryCard(card, item) {
-            if (flippedCards.length >= 2 || card.classList.contains('flipped')) return;
-            
+        function flipCard(card) {
+            if (isLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+            playSoundTone(600);
             card.classList.add('flipped');
+            card.innerText = card.dataset.letter;
+            speak(card.dataset.name);
+
             flippedCards.push(card);
-            
-            speak(item.name);
 
             if (flippedCards.length === 2) {
-                const c1 = flippedCards[0];
-                const c2 = flippedCards[1];
-                if (c1.dataset.letter === c2.dataset.letter) {
-                    matchedPairs++;
-                    flippedCards = [];
-                    if (matchedPairs === totalPairs) {
-                        setTimeout(() => {
-                            speak("אלופה!");
-                            createConfetti();
-                            setTimeout(startMemoryMenu, 3000);
-                        }, 500);
-                    }
-                } else {
-                    setTimeout(() => {
-                        c1.classList.remove('flipped');
-                        c2.classList.remove('flipped');
-                        flippedCards = [];
-                    }, 1500);
-                }
+                checkForMatch();
             }
         }
 
-        // ==========================================
-        // 4. BUBBLE POP
-        // ==========================================
-        let targetBubble = null;
-        
-        function startBubble() {
-            showView('bubble-view');
-            nextBubbleRound();
-        }
+        function checkForMatch() {
+            isLocked = true;
+            const [card1, card2] = flippedCards;
 
-        function nextBubbleRound() {
-            const area = document.getElementById('bubble-area');
-            area.innerHTML = '';
-            
-            targetBubble = alphabet[Math.floor(Math.random() * alphabet.length)];
-            document.getElementById('bubble-target-display').textContent = targetBubble.letter;
-            
-            playBubbleTTS();
+            if (card1.dataset.letter === card2.dataset.letter) {
+                playSuccessSound();
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                flippedCards = [];
+                isLocked = false;
 
-            let bubbleLetters = [targetBubble.letter];
-            while (bubbleLetters.length < 5) {
-                let r = alphabet[Math.floor(Math.random() * alphabet.length)].letter;
-                if (!bubbleLetters.includes(r)) bubbleLetters.push(r);
-            }
-            bubbleLetters.sort(() => Math.random() - 0.5);
-
-            bubbleLetters.forEach(letter => {
-                createSingleBubble(letter, area);
-            });
-        }
-
-        function createSingleBubble(letter, container) {
-            const b = document.createElement('div');
-            b.className = 'bubble w-16 h-16 sm:w-20 sm:h-20';
-            b.textContent = letter;
-            
-            b.style.left = (Math.random() * 80) + '%';
-            b.style.bottom = (Math.random() * 40) + '%';
-            b.style.animationDelay = (Math.random() * 2) + 's';
-
-            b.onclick = () => {
-                if (letter === targetBubble.letter) {
-                    speak("כל הכבוד!");
-                    createConfetti();
-                    b.style.display = 'none';
-                    setTimeout(nextBubbleRound, 1500);
-                } else {
-                    b.classList.add('wiggle');
-                    speak("נסי שוב");
-                    setTimeout(() => b.classList.remove('wiggle'), 500);
+                const totalPairs = document.querySelectorAll('.memory-card').length / 2;
+                if (matchedPairs === totalPairs) {
+                    document.getElementById('memoryMessage').innerText = 'כל הכבוד! סיימת את המשחק!';
+                    speak('כל הכבוד אלופה סיימת את המשחק');
                 }
-            };
-            container.appendChild(b);
-        }
-
-        function playBubbleTTS() {
-            if (targetBubble) speak(`איפה האות, ${targetBubble.name}?`);
-        }
-
-        // ==========================================
-        // 5. TRAIN
-        // ==========================================
-        let trainMissingLetter = '';
-
-        function startTrain() {
-            showView('train-view');
-            nextTrainRound();
-        }
-
-        function nextTrainRound() {
-            let startIndex = Math.floor(Math.random() * (alphabetPure.length - 4));
-            let seq = alphabetPure.slice(startIndex, startIndex + 4);
-            
-            let trainMissingIndex = Math.floor(Math.random() * 4);
-            trainMissingLetter = seq[trainMissingIndex];
-
-            const container = document.getElementById('train-sequence');
-            container.innerHTML = '';
-            
-            seq.forEach((letter, idx) => {
-                const cart = document.createElement('div');
-                cart.className = "w-16 h-20 sm:w-20 sm:h-24 rounded-2xl flex items-center justify-center text-4xl sm:text-5xl font-black relative border-4";
-                
-                if (idx === trainMissingIndex) {
-                    cart.classList.add('bg-white', 'border-dashed', 'border-gray-400', 'text-transparent');
-                    cart.textContent = '?';
-                    cart.id = 'missing-cart';
-                } else {
-                    cart.classList.add('bg-amber-100', 'border-amber-400', 'text-amber-700', 'shadow-md');
-                    cart.textContent = letter;
-                }
-
-                const wheel1 = document.createElement('div');
-                wheel1.className = "absolute -bottom-3 right-2 w-6 h-6 bg-gray-800 rounded-full border-2 border-gray-400";
-                const wheel2 = document.createElement('div');
-                wheel2.className = "absolute -bottom-3 left-2 w-6 h-6 bg-gray-800 rounded-full border-2 border-gray-400";
-                
-                cart.appendChild(wheel1);
-                cart.appendChild(wheel2);
-                container.appendChild(cart);
-            });
-
-            let opts = [trainMissingLetter];
-            while(opts.length < 3) {
-                let r = alphabetPure[Math.floor(Math.random() * alphabetPure.length)];
-                if(!opts.includes(r)) opts.push(r);
-            }
-            opts.sort(() => Math.random() - 0.5);
-
-            const optContainer = document.getElementById('train-options');
-            optContainer.innerHTML = '';
-            opts.forEach(letter => {
-                const btn = document.createElement('button');
-                btn.className = "btn-press bg-white text-amber-600 font-black text-4xl w-16 h-16 sm:w-20 sm:h-20 rounded-2xl shadow-[0_5px_0_0_rgba(251,191,36,1)] border-4 border-amber-200 flex items-center justify-center";
-                btn.textContent = letter;
-                btn.onclick = () => {
-                    if (letter === trainMissingLetter) {
-                        const target = document.getElementById('missing-cart');
-                        target.classList.remove('bg-white', 'border-dashed', 'border-gray-400', 'text-transparent');
-                        target.classList.add('bg-green-400', 'border-green-500', 'text-white', 'bouncy');
-                        target.textContent = letter;
-                        
-                        const wheel1 = document.createElement('div');
-                        wheel1.className = "absolute -bottom-3 right-2 w-6 h-6 bg-gray-800 rounded-full border-2 border-gray-400";
-                        const wheel2 = document.createElement('div');
-                        wheel2.className = "absolute -bottom-3 left-2 w-6 h-6 bg-gray-800 rounded-full border-2 border-gray-400";
-                        target.appendChild(wheel1);
-                        target.appendChild(wheel2);
-
-                        speak("כל הכבוד!");
-                        createConfetti();
-                        setTimeout(nextTrainRound, 2000);
-                    } else {
-                        btn.classList.add('wiggle', 'bg-red-100');
-                        speak("נסי שוב");
-                        setTimeout(() => btn.classList.remove('wiggle', 'bg-red-100'), 500);
-                    }
-                };
-                optContainer.appendChild(btn);
-            });
-        }
-
-        // ==========================================
-        // 6. SURPRISE BOX
-        // ==========================================
-        let boxAnimating = false;
-        function startBox() {
-            showView('box-view');
-            resetBox();
-        }
-
-        function resetBox() {
-            document.getElementById('box-closed').classList.remove('hide-view');
-            document.getElementById('box-open').classList.add('hide-view');
-            document.getElementById('box-letter').classList.remove('scale-100');
-            document.getElementById('box-letter').classList.add('scale-0');
-            document.getElementById('box-title').textContent = "לַחֲצִי עַל הַמַּתָּנָה!";
-            boxAnimating = false;
-        }
-
-        function openBox() {
-            if (boxAnimating) return;
-            boxAnimating = true;
-
-            const boxClosed = document.getElementById('box-closed');
-            boxClosed.classList.add('shake');
-
-            setTimeout(() => {
-                boxClosed.classList.remove('shake');
-                boxClosed.classList.add('hide-view');
-                
-                const openView = document.getElementById('box-open');
-                const letterEl = document.getElementById('box-letter');
-                openView.classList.remove('hide-view');
-                
-                const randomItem = alphabet[Math.floor(Math.random() * alphabet.length)];
-                letterEl.textContent = randomItem.letter;
-                
+            } else {
                 setTimeout(() => {
-                    letterEl.classList.remove('scale-0');
-                    letterEl.classList.add('scale-100', 'bouncy');
-                    speak(randomItem.name);
-                    createConfetti();
-                    document.getElementById('box-title').textContent = randomItem.name + "!";
-                }, 50);
-
-                setTimeout(resetBox, 3000);
-            }, 600);
+                    card1.classList.remove('flipped');
+                    card1.innerText = '?';
+                    card2.classList.remove('flipped');
+                    card2.innerText = '?';
+                    flippedCards = [];
+                    isLocked = false;
+                }, 1000);
+            }
         }
-
     </script>
 </body>
 </html>
-```
